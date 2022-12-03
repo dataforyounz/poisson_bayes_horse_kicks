@@ -5,5 +5,5 @@ model{
     deaths[i] ~ dpois( lambda )
   }
 
-  lambda ~ dgamma(alpha, beta)
+  lambda ~ dgamma(1, 1)
 }
