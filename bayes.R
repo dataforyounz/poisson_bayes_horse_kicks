@@ -53,10 +53,17 @@ data   <- c("death_mat", "n_obs", "n_corp")
 params <- c("lambda", "alpha", "beta")
 
 model_fit <- jags( data, parameters.to.save = params, model.file = "src/model_conjugate_hier.txt",
-                   n.chains = 5, n.iter = 5000, n.burnin = 2500, n.thin = 1, DIC = T)
+                   n.chains = 10, n.iter = 5000, n.burnin = 2500, n.thin = 1, DIC = T)
 
 model_fit
 
 hist( model_fit$BUGSoutput$sims.list$alpha, nclass = 50 )
 hist( model_fit$BUGSoutput$sims.list$beta, nclass = 50 )
+
+hist( model_fit$BUGSoutput$sims.list$lambda[,3], nclass = 50 )
+
+
+
+
+
 
