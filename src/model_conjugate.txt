@@ -1,0 +1,8 @@
+model{
+
+  for( i in 1:n_obs ){
+    deaths[i] ~ dpois( lambda )
+  }
+
+  lambda ~ dgamma(alpha, beta)
+}
