@@ -23,19 +23,20 @@ beta  <- 1
 # Specify jags model and generate samples
 data      <- c( "n_obs", "deaths" )
 params    <- "lambda"
-model_fit <- jags( data, 
-                   parameters.to.save = params, 
-                   model.file = "src/model_conjugate.txt",
-                   n.chains = 2, 
-                   n.iter = 5000, 
-                   n.burnin = 1000, 
-                   n.thin = 1, 
-                   DIC = T)
+model_pooled <- jags( data, 
+                      parameters.to.save = params, 
+                      model.file = "src/model_conjugate.txt",
+                      n.chains = 2, 
+                      n.iter = 5000, 
+                      n.burnin = 1000, 
+                      n.thin = 1, 
+                      DIC = T )
 
 # Create tibble of posterior samples
 posterior <- tibble(
-             samples = model_fit$BUGSoutput$sims.list$lambda[,1]
+             samples = model_pooled$BUGSoutput$sims.list$lambda[,1]
 )
+save( model_pooled, file = "samples/pooled_samples.Rdata" ) 
 
 # Histogram of posterior with Gamma density overlayed
 plot_pooled <- ggplot( data = posterior ) + 
@@ -43,20 +44,21 @@ plot_pooled <- ggplot( data = posterior ) +
                                bins = 35, fill = "sky blue", col = "white" ) +
                geom_function( fun = dgamma, 
                               args = list( shape = alpha + sum(deaths), rate = beta + n_obs), 
-                              col = "navy", size = .7) +
+                              col = "navy", linewidth = .7) +
                labs( x = "Lambda", y = "Density", subtitle = "Posterior samples") +
                theme_bw() 
 
 ggsave( plot_pooled, file = "figs/plot_pooled.png", units = "cm", width = 8, height = 7)
 
+# Posterior Predictive
 
-index <- sample( 1:dim(model_fit$BUGSoutput$sims.list$lambda)[1], 10, replace = T)
-samps <- model_fit$BUGSoutput$sims.list$lambda[index,1]
+index <- sample( 1:dim(model_pooled$BUGSoutput$sims.list$lambda)[1], 100, replace = T)
+samps <- model_pooled$BUGSoutput$sims.list$lambda[index,1]
 
-sapply( samps, function(lambda) dpois(0:10, lambda) ) 
+preds <- sapply( samps, function(lambda) rpois(n_obs, lambda) ) 
 
 
-
+matplot(0:10, preds, type = "p", pch = 16, col = "grey")
 
 ## Hierarchical 
 
