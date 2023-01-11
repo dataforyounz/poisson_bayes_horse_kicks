@@ -151,7 +151,7 @@ bayes_summary <- function( fit )
     "\nMode: \t", round( fit$posterior_summary["mode"], 3 ),
     "\nMedian: ", round( fit$posterior_summary["median"], 3 ),
     "\nMean: \t", round( fit$posterior_summary["mean"], 3 ),
-    "\nCI: \t", "[", round( fit$posterior_ci[1], 3 ), " ", round( fit$posterior_ci[2], 3 ), "]"
+    "\nCI: \t", "[", round( fit$posterior_ci[1], 3 ), " ", round( fit$posterior_ci[2], 3 ), "]\n"
     
   ))
   
