@@ -139,7 +139,7 @@ bayes_summary <- function( fit )
   
   cat( paste0(
     "--------------------------------------------\n",
-    "Poisson-Gamma Model\n--------------------------------------------\n",
+    "Gamma-Poisson Model\n--------------------------------------------\n",
     "Data",
     "\nObs: ", fit$n_obs,
     "\nSum: ", sum( fit$data ),
